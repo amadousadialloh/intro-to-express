@@ -9,19 +9,29 @@ const collectibles = [
   { name: "vintage 1970s yogurt SOLD AS-IS", price: 0.99 },
 ];
 
-// app.get("/greetings/:username", (req, res) => {
-//   res.send(`hello there ${req.params.username}`);
-// });
+const shoes = [
+  { name: "Birkenstocks", price: 50, type: "sandal" },
+  { name: "Air Jordans", price: 500, type: "sneaker" },
+  { name: "Air Mahomeses", price: 501, type: "sneaker" },
+  { name: "Utility Boots", price: 20, type: "boot" },
+  { name: "Velcro Sandals", price: 15, type: "sandal" },
+  { name: "Jet Boots", price: 1000, type: "boot" },
+  { name: "Fifty-Inch Heels", price: 175, type: "heel" },
+];
 
-// app.get("/roll/:number", (req, res) => {
-//   let rolledNumber = req.params.number;
-//   if (isNaN(rolledNumber)) {
-//     res.send(`<p>You must specify a number</p>`);
-//   } else {
-//     const randomNumber = Math.floor(Math.random() * rolledNumber);
-//     res.send(`<p>You rolled a ${randomNumber}</p>`);
-//   }
-// });
+app.get("/greetings/:username", (req, res) => {
+  res.send(`hello there ${req.params.username}`);
+});
+
+app.get("/roll/:number", (req, res) => {
+  let rolledNumber = req.params.number;
+  if (isNaN(rolledNumber)) {
+    res.send(`<p>You must specify a number</p>`);
+  } else {
+    const randomNumber = Math.floor(Math.random() * rolledNumber);
+    res.send(`<p>You rolled a ${randomNumber}</p>`);
+  }
+});
 
 app.get("/collectibles/:indexparam", (req, res) => {
   let indexParam = Number(req.params.indexparam);
@@ -32,6 +42,29 @@ app.get("/collectibles/:indexparam", (req, res) => {
       `<p> So, you want the ${collectibles[indexParam].name}? For ${collectibles[indexParam].price}, it can be yours!`
     );
   }
+});
+
+app.get("/shoes", (req, res) => {
+  const minPrice = req.query["min-price"];
+  const filterredShoes = shoes.filter((shoe) => {
+    return shoe.price >= minPrice;
+  });
+  res.json(filterredShoes);
+});
+
+app.get("/shoes", (req, res) => {
+  const shoeType = req.query["type"];
+  const filterredShoes = shoes.filter((shoe) => {
+    return shoe.type === shoeType;
+  });
+  res.json(filterredShoes);
+});
+app.get("/shoes", (req, res) => {
+  const maxPrice = req.query["max-price"];
+  const filterredShoes = shoes.filter((shoe) => {
+    return shoe.price <= maxPrice;
+  });
+  res.json(filterredShoes);
 });
 
 app.listen(port, () => {
